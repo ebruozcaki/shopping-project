@@ -1,1 +1,31 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
 
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Helvetica", sans-serif;
+  color: #222;
+  background-color: #eee;
+}
+
+/*LAYOUT*/
+header {
+  position: relative;
+  height: 35vh;
+  border-bottom: 7px solid #222;
+}
+
+main {
+  height: 65vh;
+  color: #222;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
