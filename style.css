@@ -41,6 +41,10 @@ h1 {
   transform: translate(-50%, -50%);
 }
 
+p {
+  font-size: 1.5rem;
+}
+
 .new-category {
   background-color: rgb(21, 197, 109);
   color: #eee;
@@ -68,5 +72,52 @@ h1 {
   right: 5rem;
   border-radius: 10rem;
   padding: 1.75rem 1.75rem;
+  cursor: pointer;
+}
+
+.category {
+  position: absolute;
+  top: 17rem;
+  left: 5rem;
+  width: 30%;
+
+  background-color: white;
+  padding: 1.75rem;
+  border-radius: 5px;
+  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+}
+
+.category-name {
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  font-size: 1.7rem;
+  font-weight: 600;
+  color: #222;
+  text-align: center;
+}
+
+.add-product {
+  background-color: rgb(21, 197, 109);
+  color: #eee;
+  border: none;
+  font-size: 1.3rem;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 1rem;
+  padding: 1%;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.delete-product {
+  background-color: rgb(197, 36, 21);
+  color: #eee;
+  border: none;
+  font-size: 1.3rem;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 1rem;
+  padding: 1%;
+  border-radius: 5px;
   cursor: pointer;
 }
