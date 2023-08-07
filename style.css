@@ -152,7 +152,7 @@ p {
   font-weight: 400;
   color: #222;
   text-align: center;
-  width: 1%;
+  width: 3%;
 }
 .amount {
   margin: 0.5rem;
@@ -178,5 +178,5 @@ p {
   font-weight: 400;
   color: #222;
   text-align: center;
-  width: 50%;
+  width: 45%;
 }
