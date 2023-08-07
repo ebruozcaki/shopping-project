@@ -14,7 +14,34 @@ input.addEventListener("keydown", function (e) {
 });
 
 addProduct.addEventListener("click", function () {
-  const newProduct = document.createElement("section");
+  const productSection = document.querySelector(".product");
+  const newProduct = document.createElement("div");
   newProduct.classList.add("product");
-  document.querySelector(".category").appendChild(newProduct);
+
+  const checkbox = document.createElement("input");
+  checkbox.setAttribute("type", "checkbox");
+  checkbox.classList.add("checkbox");
+  newProduct.appendChild(checkbox);
+
+  const productInput = document.createElement("input");
+  productInput.setAttribute("type", "string");
+  productInput.setAttribute("placeholder", "Ürün Başlığı");
+  productInput.classList.add("product-input");
+  newProduct.appendChild(productInput);
+
+  const amount = document.createElement("input");
+  amount.setAttribute("type", "number");
+  amount.setAttribute("placeholder", "Adet");
+  amount.classList.add("amount");
+  newProduct.appendChild(amount);
+
+  const price = document.createElement("input");
+  price.setAttribute("type", "number");
+  price.setAttribute("placeholder", "Birim Fiyat");
+  price.classList.add("price");
+  newProduct.appendChild(price);
+
+  productSection.appendChild(newProduct);
+
+  checkbox.classList.add("hidden");
 });

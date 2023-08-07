@@ -146,6 +146,14 @@ p {
   color: #222;
 }
 
+.checkbox {
+  margin: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: #222;
+  text-align: center;
+  width: 1%;
+}
 .amount {
   margin: 0.5rem;
   font-size: 1.5rem;
@@ -161,7 +169,7 @@ p {
   font-weight: 400;
   color: #222;
   text-align: center;
-  width: 25%;
+  width: 23%;
 }
 
 .product-input {
@@ -170,5 +178,5 @@ p {
   font-weight: 400;
   color: #222;
   text-align: center;
-  width: 52%;
+  width: 50%;
 }
