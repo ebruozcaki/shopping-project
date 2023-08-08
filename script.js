@@ -1,18 +1,10 @@
 "use strict";
 
-let input = document.querySelector(".category-input");
 let title = document.querySelector(".title");
 let addProduct = document.querySelector(".add-product");
 let deleteProduct = document.querySelector(".delete-product");
 let newCategoryBtn = document.querySelector(".new-category");
 let removeFuncWorking = false;
-
-input.addEventListener("keydown", function (e) {
-  if (e.key === "Enter") {
-    title.prepend(input.value);
-    input.classList.add("hidden");
-  }
-});
 
 //Adding new product to a certain category
 addProduct.addEventListener("click", function () {
@@ -95,9 +87,13 @@ function uncheck(checkbox) {
 
 //Creating new category
 newCategoryBtn.addEventListener("click", function () {
-  const categorySection = document.querySelector(".category-section");
+  const body = document.querySelector("body");
   const newCategory = document.createElement("section");
   newCategory.classList.add("category-section");
+
+  const categoryTitle = document.createElement("h3");
+  categoryTitle.classList.add("title");
+  newCategory.appendChild(categoryTitle);
 
   const addProductBtn = document.createElement("btn");
   addProductBtn.classList.add("add-product");
@@ -109,27 +105,16 @@ newCategoryBtn.addEventListener("click", function () {
   deleteProductBtn.textContent = "Ürün Sil";
   newCategory.appendChild(deleteProductBtn);
 
-  const categoryTitle = document.createElement("h3");
-  categoryTitle.classList.add("title");
-  newCategory.appendChild(categoryTitle);
-
   const categoryInput = document.createElement("input");
   categoryInput.classList.add("category-input");
   categoryInput.setAttribute("type", "string");
   categoryInput.setAttribute("placeholder", "KATEGORİ BAŞLIĞI");
   newCategory.appendChild(categoryInput);
 
-  categoryInput.addEventListener("keydown", function (e) {
-    if (e.key === "Enter") {
-      categoryTitle.prepend(categoryInput.value);
-      categoryInput.classList.add("hidden");
-    }
-  });
-
   const deleteCategoryBtn = document.createElement("btn");
   deleteCategoryBtn.classList.add("delete-category");
   deleteCategoryBtn.textContent = "X";
   newCategory.appendChild(deleteCategoryBtn);
 
-  categorySection.appendChild(newCategory);
+  body.insertBefore(newCategory, document.querySelector("script"));
 });
