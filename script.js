@@ -4,6 +4,7 @@ let input = document.querySelector(".category-input");
 let title = document.querySelector(".title");
 let addProduct = document.querySelector(".add-product");
 let deleteProduct = document.querySelector(".delete-product");
+let newCategoryBtn = document.querySelector(".new-category");
 
 input.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
@@ -45,47 +46,90 @@ addProduct.addEventListener("click", function () {
   productSection.appendChild(newProduct);
 
   checkbox.classList.add("hidden");
+  setupCheckboxListener(checkbox);
 });
+
+function setupCheckboxListener(checkbox) {
+  checkbox.addEventListener("change", function () {
+    if (checkbox.checked) {
+      checkbox.parentElement.classList.add("selected");
+    } else {
+      checkbox.parentElement.classList.remove("selected");
+    }
+  });
+}
 
 //Deleting product(s) from a certain category
 //NEED UPDATE TO CHECKBOX OF PREVIOUS PRODUCTS
 deleteProduct.addEventListener("click", function () {
   let checkboxes = document.querySelectorAll(".checkbox");
-  for (let i = 0; i < checkboxes.length; i++) {
-    let checkboxToBeChecked = checkboxes[i];
-    checkboxes[i].classList.remove("hidden");
-    //Checkboxes check&uncheck
-    checkboxToBeChecked.addEventListener("change", function () {
-      console.log("here");
-      if (checkboxToBeChecked.checked === true) {
-        check(checkboxToBeChecked);
-        console.log("checked");
-      } else {
-        uncheck(checkboxToBeChecked);
-        console.log("unchecked");
-      }
-    });
-  }
+  checkboxDisplay(checkboxes);
+
   //Deleting products of which checkboxes are checked
   deleteProduct.addEventListener("click", function () {
-    const products = document.querySelectorAll(".product");
-    for (let i = 0; i < products.length; i++) {
-      let productToBeDeleted = products[i];
-      if (productToBeDeleted.childNodes[0].checked === true) {
-        productToBeDeleted.remove();
-      }
-    }
-    for (let i = 0; i < checkboxes.length; i++) {
-      checkboxes[i].classList.add("hidden");
+    const selectedProducts = document.querySelectorAll(".product.selected");
+    selectedProducts.forEach((product) => {
+      product.remove();
+    });
+    checkboxes.forEach((checkbox) => {
+      checkbox.classList.add("hidden");
+    });
+  });
+});
+
+const checkboxDisplay = function (checkboxesList) {
+  for (let i = 0; i < checkboxesList.length; i++) {
+    let checkboxToBeChecked = checkboxesList[i];
+    //Checkbox display
+    checkboxToBeChecked.classList.remove("hidden");
+  }
+};
+
+//Checking and unchecking functions
+function check(checkbox) {
+  checkbox.checked = true;
+}
+function uncheck(checkbox) {
+  checkbox.checked = false;
+}
+
+//Creating new category
+newCategoryBtn.addEventListener("click", function () {
+  const categorySection = document.querySelector(".category-section");
+  const newCategory = document.createElement("section");
+  newCategory.classList.add("category-section");
+
+  const addProductBtn = document.createElement("btn");
+  addProductBtn.classList.add("add-product");
+  addProductBtn.textContent = "Ürün Ekle";
+  newCategory.appendChild(addProductBtn);
+
+  const deleteProductBtn = document.createElement("btn");
+  deleteProductBtn.classList.add("delete-product");
+  deleteProductBtn.textContent = "Ürün Sil";
+  newCategory.appendChild(deleteProductBtn);
+
+  const categoryTitle = document.createElement("h3");
+  categoryTitle.classList.add("title");
+  newCategory.appendChild(categoryTitle);
+
+  const categoryInput = document.createElement("input");
+  categoryInput.classList.add("category-input");
+  categoryInput.setAttribute("type", "string");
+  categoryInput.setAttribute("placeholder", "KATEGORİ BAŞLIĞI");
+  newCategory.appendChild(categoryInput);
+
+  categoryInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      categoryTitle.prepend(categoryInput.value);
+      categoryInput.classList.add("hidden");
     }
   });
 
-  //Checking and unchecking functions
-  function check(checkbox) {
-    checkbox.checked === true;
-  }
+  const deleteCategoryBtn = document.createElement("btn");
+  deleteCategoryBtn.classList.add("delete-category");
+  deleteCategoryBtn.textContent = "X";
+  newCategory.appendChild(deleteCategoryBtn);
 
-  function uncheck(checkbox) {
-    checkbox.checked === false;
-  }
+  categorySection.appendChild(newCategory);
 });
