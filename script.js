@@ -4,6 +4,7 @@ let title = document.querySelector(".title");
 let addProduct = document.querySelector(".add-product");
 let deleteProduct = document.querySelector(".delete-product");
 let newCategoryBtn = document.querySelector(".new-category");
+let deleteCategoryBtn = document.querySelector(".delete-category");
 let removeFuncWorking = false;
 
 //Adding new product to a certain category
@@ -117,4 +118,8 @@ newCategoryBtn.addEventListener("click", function () {
   newCategory.appendChild(deleteCategoryBtn);
 
   body.insertBefore(newCategory, document.querySelector("script"));
+});
+
+deleteCategoryBtn.addEventListener("click", function () {
+  deleteCategoryBtn.parentNode.remove();
 });
