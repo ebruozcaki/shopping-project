@@ -5,6 +5,7 @@ let title = document.querySelector(".title");
 let addProduct = document.querySelector(".add-product");
 let deleteProduct = document.querySelector(".delete-product");
 let newCategoryBtn = document.querySelector(".new-category");
+let removeFuncWorking = false;
 
 input.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
@@ -60,13 +61,12 @@ function setupCheckboxListener(checkbox) {
 }
 
 //Deleting product(s) from a certain category
-//NEED UPDATE TO CHECKBOX OF PREVIOUS PRODUCTS
 deleteProduct.addEventListener("click", function () {
+  removeFuncWorking = !removeFuncWorking;
   let checkboxes = document.querySelectorAll(".checkbox");
-  checkboxDisplay(checkboxes);
-
-  //Deleting products of which checkboxes are checked
-  deleteProduct.addEventListener("click", function () {
+  if (removeFuncWorking) {
+    checkboxDisplay(checkboxes);
+  } else {
     const selectedProducts = document.querySelectorAll(".product.selected");
     selectedProducts.forEach((product) => {
       product.remove();
@@ -74,7 +74,7 @@ deleteProduct.addEventListener("click", function () {
     checkboxes.forEach((checkbox) => {
       checkbox.classList.add("hidden");
     });
-  });
+  }
 });
 
 const checkboxDisplay = function (checkboxesList) {
