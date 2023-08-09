@@ -18,19 +18,31 @@ budgetInput.addEventListener("keydown", function (e) {
 });
 
 //Calculating total product price
-function calculateTotalPrice(productAmount) {
+// Calculating total product price
+function calculateTotalPrice() {
   let productPrices = document.querySelectorAll(".product .price");
   let total = 0;
 
   productPrices.forEach((priceInput) => {
+    const productContainer = priceInput.parentElement;
+    const amountInput = productContainer.querySelector(".amount");
+    const productAmount = parseInt(amountInput.value) || 0; // Get the product amount
+
     const priceValue = parseFloat(priceInput.value) * productAmount;
     if (!isNaN(priceValue)) {
       total += priceValue;
     }
   });
-  productAmount = 0;
-  console.log("Total Price:", total);
+  console.log(total);
   return total;
+}
+
+// Calculate total price and check budget
+function calculateTotalAndCheckBudget() {
+  const currentTotal = calculateTotalPrice();
+  if (budgetValue < currentTotal) {
+    alert("Bütçe " + (currentTotal - budgetValue) + " TL aşıldı!");
+  }
 }
 
 //Adding new product to a certain category when "Ürün Ekle" button is clicked
@@ -66,21 +78,19 @@ addProduct.addEventListener("click", function () {
 
   //When new price is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
   price.addEventListener("input", function () {
-    const currentTotal = calculateTotalPrice(productAmount);
-    if (budgetValue < currentTotal) {
-      alert("Bütçe  " + (currentTotal - budgetValue) + " TL aşıldı!");
-    }
+    calculateTotalAndCheckBudget();
   });
 
   amount.addEventListener("input", function () {
-    productAmount = parseInt(this.value);
+    productAmount = parseInt(this.value); //Update the productAmount
+    calculateTotalAndCheckBudget();
   });
 
   productSection.appendChild(newProduct);
 
   checkbox.classList.add("hidden");
   setupCheckboxListener(checkbox);
-  calculateTotalPrice();
+  calculateTotalAndCheckBudget(); //Calculate the total price initially
 });
 
 function setupCheckboxListener(checkbox) {
@@ -111,13 +121,13 @@ deleteProduct.addEventListener("click", function () {
   }
 });
 
-const checkboxDisplay = function (checkboxesList) {
+function checkboxDisplay(checkboxesList) {
   for (let i = 0; i < checkboxesList.length; i++) {
     let checkboxToBeChecked = checkboxesList[i];
     //Checkbox display
     checkboxToBeChecked.classList.remove("hidden");
   }
-};
+}
 
 //Checking and unchecking functions
 function check(checkbox) {
