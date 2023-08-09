@@ -86,6 +86,68 @@ function uncheck(checkbox) {
   checkbox.checked = false;
 }
 
+function setupCategoryListeners(category) {
+  const addProductBtn = category.querySelector(".add-product");
+  const deleteProductBtn = category.querySelector(".delete-product");
+  const deleteCategoryBtn = category.querySelector(".delete-category");
+
+  addProductBtn.addEventListener("click", function () {
+    console.log("here");
+    const newProduct = document.createElement("div");
+    newProduct.classList.add("product");
+
+    const checkbox = document.createElement("input");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.classList.add("checkbox");
+    checkbox.checked = false;
+    newProduct.appendChild(checkbox);
+
+    const productInput = document.createElement("input");
+    productInput.setAttribute("type", "string");
+    productInput.setAttribute("placeholder", "Ürün Başlığı");
+    productInput.classList.add("product-input");
+    newProduct.appendChild(productInput);
+
+    const amount = document.createElement("input");
+    amount.setAttribute("type", "number");
+    amount.setAttribute("placeholder", "Adet");
+    amount.classList.add("amount");
+    newProduct.appendChild(amount);
+
+    const price = document.createElement("input");
+    price.setAttribute("type", "number");
+    price.setAttribute("placeholder", "Birim Fiyat");
+    price.classList.add("price");
+    newProduct.appendChild(price);
+
+    console.log(newProduct);
+    category.appendChild(newProduct);
+
+    checkbox.classList.add("hidden");
+    setupCheckboxListener(checkbox);
+  });
+
+  deleteProductBtn.addEventListener("click", function () {
+    removeFuncWorking = !removeFuncWorking;
+    let checkboxes = category.querySelectorAll(".checkbox");
+    if (removeFuncWorking) {
+      checkboxDisplay(checkboxes);
+    } else {
+      const selectedProducts = category.querySelectorAll(".product.selected");
+      selectedProducts.forEach((product) => {
+        product.remove();
+      });
+      checkboxes.forEach((checkbox) => {
+        checkbox.classList.add("hidden");
+      });
+    }
+  });
+
+  deleteCategoryBtn.addEventListener("click", function () {
+    category.remove();
+  });
+}
+
 //Creating new category
 newCategoryBtn.addEventListener("click", function () {
   const body = document.querySelector("body");
@@ -118,6 +180,7 @@ newCategoryBtn.addEventListener("click", function () {
   newCategory.appendChild(deleteCategoryBtn);
 
   body.insertBefore(newCategory, document.querySelector("script"));
+  setupCategoryListeners(newCategory);
 });
 
 deleteCategoryBtn.addEventListener("click", function () {

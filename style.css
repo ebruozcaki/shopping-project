@@ -86,7 +86,7 @@ p {
 .category-section {
   display: inline-block;
   position: relative;
-  top: 3rem;
+  bottom: 3rem;
   width: 42rem;
   background-color: white;
   padding: 1.5rem;
