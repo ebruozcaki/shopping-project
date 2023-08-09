@@ -1,10 +1,49 @@
 "use strict";
 
 let budgetInput = document.getElementById("budget-input");
-let addProduct = document.querySelector(".add-product");
-let deleteProduct = document.querySelector(".delete-product");
 let newCategoryBtn = document.querySelector(".new-category");
-let deleteCategoryBtn = document.querySelector(".delete-category");
+let complete = document.querySelector(".complete");
+
+//Category creation
+function createCategory() {
+  const body = document.querySelector("body");
+  const newCategory = document.createElement("section");
+  newCategory.classList.add("category-section");
+
+  const categoryTitle = document.createElement("h3");
+  categoryTitle.classList.add("title");
+  newCategory.appendChild(categoryTitle);
+
+  const addProductBtn = document.createElement("btn");
+  addProductBtn.classList.add("add-product");
+  addProductBtn.textContent = "Ürün Ekle";
+  newCategory.appendChild(addProductBtn);
+
+  const deleteProductBtn = document.createElement("btn");
+  deleteProductBtn.classList.add("delete-product");
+  deleteProductBtn.textContent = "Ürün Sil";
+  newCategory.appendChild(deleteProductBtn);
+
+  const categoryInput = document.createElement("input");
+  categoryInput.classList.add("category-input");
+  categoryInput.setAttribute("type", "string");
+  categoryInput.setAttribute("placeholder", "KATEGORİ BAŞLIĞI");
+  newCategory.appendChild(categoryInput);
+
+  const deleteCategoryBtn = document.createElement("btn");
+  deleteCategoryBtn.classList.add("delete-category");
+  deleteCategoryBtn.textContent = "X";
+  newCategory.appendChild(deleteCategoryBtn);
+
+  deleteCategoryBtn.addEventListener("click", function () {
+    deleteCategoryBtn.parentNode.remove();
+  });
+  body.insertBefore(newCategory, document.querySelector("script"));
+  setupCategoryListeners(newCategory);
+}
+
+//Creating the default category
+createCategory();
 
 ///////////////*---FUNCTIONS---*///////////////
 
@@ -63,110 +102,17 @@ budgetInput.addEventListener("keydown", function (e) {
   }
 });
 
-//Adding new product to a certain category when "Ürün Ekle" button is clicked
-addProduct.addEventListener("click", function () {
-  const productSection = document.querySelector(".product");
-  const newProduct = document.createElement("div");
-  newProduct.classList.add("product");
-
-  const checkbox = document.createElement("input");
-  checkbox.setAttribute("type", "checkbox");
-  checkbox.classList.add("checkbox");
-  checkbox.checked = false;
-  newProduct.appendChild(checkbox);
-
-  const productInput = document.createElement("input");
-  productInput.setAttribute("type", "string");
-  productInput.setAttribute("placeholder", "Ürün Başlığı");
-  productInput.classList.add("product-input");
-  newProduct.appendChild(productInput);
-
-  const amount = document.createElement("input");
-  amount.setAttribute("type", "number");
-  amount.setAttribute("placeholder", "Adet");
-  amount.classList.add("amount");
-  newProduct.appendChild(amount);
-  let productAmount = 0;
-
-  let price = document.createElement("input");
-  price.setAttribute("type", "number");
-  price.setAttribute("placeholder", "Birim Fiyat");
-  price.classList.add("price");
-  newProduct.appendChild(price);
-
-  //When new price is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
-  price.addEventListener("input", function () {
-    calculateTotalAndCheckBudget();
-  });
-
-  //When new amount is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
-  amount.addEventListener("input", function () {
-    productAmount = parseInt(this.value); //Update the productAmount
-    calculateTotalAndCheckBudget();
-  });
-
-  productSection.appendChild(newProduct);
-
-  checkbox.classList.add("hidden");
-  setupCheckboxListener(checkbox);
-  calculateTotalAndCheckBudget(); //Calculate the total price initially
-});
-
-//Deleting product(s) from a certain category
-deleteProduct.addEventListener("click", function () {
-  removeFuncWorking = !removeFuncWorking;
-  let checkboxes = document.querySelectorAll(".checkbox");
-  if (removeFuncWorking) {
-    checkboxDisplay(checkboxes);
-  } else {
-    const selectedProducts = document.querySelectorAll(".product.selected");
-    selectedProducts.forEach((product) => {
-      product.remove();
-      calculateTotalPrice();
-    });
-    checkboxes.forEach((checkbox) => {
-      checkbox.classList.add("hidden");
-    });
-  }
-});
-
 //Creating new category
 newCategoryBtn.addEventListener("click", function () {
-  const body = document.querySelector("body");
-  const newCategory = document.createElement("section");
-  newCategory.classList.add("category-section");
-
-  const categoryTitle = document.createElement("h3");
-  categoryTitle.classList.add("title");
-  newCategory.appendChild(categoryTitle);
-
-  const addProductBtn = document.createElement("btn");
-  addProductBtn.classList.add("add-product");
-  addProductBtn.textContent = "Ürün Ekle";
-  newCategory.appendChild(addProductBtn);
-
-  const deleteProductBtn = document.createElement("btn");
-  deleteProductBtn.classList.add("delete-product");
-  deleteProductBtn.textContent = "Ürün Sil";
-  newCategory.appendChild(deleteProductBtn);
-
-  const categoryInput = document.createElement("input");
-  categoryInput.classList.add("category-input");
-  categoryInput.setAttribute("type", "string");
-  categoryInput.setAttribute("placeholder", "KATEGORİ BAŞLIĞI");
-  newCategory.appendChild(categoryInput);
-
-  const deleteCategoryBtn = document.createElement("btn");
-  deleteCategoryBtn.classList.add("delete-category");
-  deleteCategoryBtn.textContent = "X";
-  newCategory.appendChild(deleteCategoryBtn);
-
-  body.insertBefore(newCategory, document.querySelector("script"));
-  setupCategoryListeners(newCategory);
+  createCategory();
 });
 
-deleteCategoryBtn.addEventListener("click", function () {
-  deleteCategoryBtn.parentNode.remove();
+complete.addEventListener("click", function () {
+  let categories = document.querySelectorAll(".category-section");
+  categories.forEach((category) => {
+    category.remove();
+  });
+  alert("Lütfen sayfayı yenileyin.");
 });
 
 ///////////////*---SETUP FUNCTIONS---*///////////////
@@ -187,6 +133,7 @@ function setupCategoryListeners(category) {
   const deleteProductBtn = category.querySelector(".delete-product");
   const deleteCategoryBtn = category.querySelector(".delete-category");
 
+  //Adding new product to a certain category when "Ürün Ekle" button is clicked
   addProductBtn.addEventListener("click", function () {
     const newProduct = document.createElement("div");
     newProduct.classList.add("product");
@@ -219,8 +166,21 @@ function setupCategoryListeners(category) {
 
     checkbox.classList.add("hidden");
     setupCheckboxListener(checkbox);
+
+    //When new price is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
+    price.addEventListener("input", function () {
+      console.log("price listener");
+      calculateTotalAndCheckBudget();
+    });
+
+    //When new amount is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
+    amount.addEventListener("input", function () {
+      console.log("amount listener");
+      calculateTotalAndCheckBudget();
+    });
   });
 
+  //Deleting product(s) from a certain category when "Ürün Sil" button is clicked
   deleteProductBtn.addEventListener("click", function () {
     removeFuncWorking = !removeFuncWorking;
     let checkboxes = category.querySelectorAll(".checkbox");
@@ -237,6 +197,7 @@ function setupCategoryListeners(category) {
     }
   });
 
+  //Deleting category when "X" button is clicked
   deleteCategoryBtn.addEventListener("click", function () {
     category.remove();
   });
