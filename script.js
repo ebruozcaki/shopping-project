@@ -18,17 +18,17 @@ budgetInput.addEventListener("keydown", function (e) {
 });
 
 //Calculating total product price
-function calculateTotalPrice() {
+function calculateTotalPrice(productAmount) {
   let productPrices = document.querySelectorAll(".product .price");
   let total = 0;
 
   productPrices.forEach((priceInput) => {
-    const priceValue = parseFloat(priceInput.value);
+    const priceValue = parseFloat(priceInput.value) * productAmount;
     if (!isNaN(priceValue)) {
       total += priceValue;
     }
   });
-
+  productAmount = 0;
   console.log("Total Price:", total);
   return total;
 }
@@ -56,6 +56,7 @@ addProduct.addEventListener("click", function () {
   amount.setAttribute("placeholder", "Adet");
   amount.classList.add("amount");
   newProduct.appendChild(amount);
+  let productAmount = 0;
 
   let price = document.createElement("input");
   price.setAttribute("type", "number");
@@ -65,10 +66,14 @@ addProduct.addEventListener("click", function () {
 
   //When new price is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
   price.addEventListener("input", function () {
-    const currentTotal = calculateTotalPrice();
+    const currentTotal = calculateTotalPrice(productAmount);
     if (budgetValue < currentTotal) {
-      window.alert("Bütçe  " + (currentTotal - budgetValue) + " TL aşıldı!");
+      alert("Bütçe  " + (currentTotal - budgetValue) + " TL aşıldı!");
     }
+  });
+
+  amount.addEventListener("input", function () {
+    productAmount = parseInt(this.value);
   });
 
   productSection.appendChild(newProduct);
@@ -98,6 +103,7 @@ deleteProduct.addEventListener("click", function () {
     const selectedProducts = document.querySelectorAll(".product.selected");
     selectedProducts.forEach((product) => {
       product.remove();
+      calculateTotalPrice();
     });
     checkboxes.forEach((checkbox) => {
       checkbox.classList.add("hidden");
@@ -128,7 +134,6 @@ function setupCategoryListeners(category) {
   const deleteCategoryBtn = category.querySelector(".delete-category");
 
   addProductBtn.addEventListener("click", function () {
-    console.log("here");
     const newProduct = document.createElement("div");
     newProduct.classList.add("product");
 
@@ -156,7 +161,6 @@ function setupCategoryListeners(category) {
     price.classList.add("price");
     newProduct.appendChild(price);
 
-    console.log(newProduct);
     category.appendChild(newProduct);
 
     checkbox.classList.add("hidden");
