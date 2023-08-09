@@ -5,19 +5,9 @@ let addProduct = document.querySelector(".add-product");
 let deleteProduct = document.querySelector(".delete-product");
 let newCategoryBtn = document.querySelector(".new-category");
 let deleteCategoryBtn = document.querySelector(".delete-category");
-let removeFuncWorking = false;
 
-//Taking budget input and storing it in budgetValue
-let budgetValue = 0;
-budgetInput.addEventListener("keydown", function (e) {
-  if (e.key === "Enter") {
-    e.preventDefault();
-    budgetValue = parseFloat(budgetInput.value);
-    budgetInput.disabled = true;
-  }
-});
+///////////////*---FUNCTIONS---*///////////////
 
-//Calculating total product price
 // Calculating total product price
 function calculateTotalPrice() {
   let productPrices = document.querySelectorAll(".product .price");
@@ -44,6 +34,34 @@ function calculateTotalAndCheckBudget() {
     alert("Bütçe " + (currentTotal - budgetValue) + " TL aşıldı!");
   }
 }
+
+//Checkbox display
+function checkboxDisplay(checkboxesList) {
+  for (let i = 0; i < checkboxesList.length; i++) {
+    let checkboxToBeChecked = checkboxesList[i];
+    checkboxToBeChecked.classList.remove("hidden");
+  }
+}
+
+//Checking and unchecking functions
+function check(checkbox) {
+  checkbox.checked = true;
+}
+function uncheck(checkbox) {
+  checkbox.checked = false;
+}
+
+///////////////*---EVENT LISTENERS---*///////////////
+
+//Taking budget input and storing it in budgetValue
+let budgetValue = 0;
+budgetInput.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    budgetValue = parseFloat(budgetInput.value);
+    budgetInput.disabled = true;
+  }
+});
 
 //Adding new product to a certain category when "Ürün Ekle" button is clicked
 addProduct.addEventListener("click", function () {
@@ -81,6 +99,7 @@ addProduct.addEventListener("click", function () {
     calculateTotalAndCheckBudget();
   });
 
+  //When new amount is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
   amount.addEventListener("input", function () {
     productAmount = parseInt(this.value); //Update the productAmount
     calculateTotalAndCheckBudget();
@@ -92,16 +111,6 @@ addProduct.addEventListener("click", function () {
   setupCheckboxListener(checkbox);
   calculateTotalAndCheckBudget(); //Calculate the total price initially
 });
-
-function setupCheckboxListener(checkbox) {
-  checkbox.addEventListener("change", function () {
-    if (checkbox.checked) {
-      checkbox.parentElement.classList.add("selected");
-    } else {
-      checkbox.parentElement.classList.remove("selected");
-    }
-  });
-}
 
 //Deleting product(s) from a certain category
 deleteProduct.addEventListener("click", function () {
@@ -121,20 +130,55 @@ deleteProduct.addEventListener("click", function () {
   }
 });
 
-function checkboxDisplay(checkboxesList) {
-  for (let i = 0; i < checkboxesList.length; i++) {
-    let checkboxToBeChecked = checkboxesList[i];
-    //Checkbox display
-    checkboxToBeChecked.classList.remove("hidden");
-  }
-}
+//Creating new category
+newCategoryBtn.addEventListener("click", function () {
+  const body = document.querySelector("body");
+  const newCategory = document.createElement("section");
+  newCategory.classList.add("category-section");
 
-//Checking and unchecking functions
-function check(checkbox) {
-  checkbox.checked = true;
-}
-function uncheck(checkbox) {
-  checkbox.checked = false;
+  const categoryTitle = document.createElement("h3");
+  categoryTitle.classList.add("title");
+  newCategory.appendChild(categoryTitle);
+
+  const addProductBtn = document.createElement("btn");
+  addProductBtn.classList.add("add-product");
+  addProductBtn.textContent = "Ürün Ekle";
+  newCategory.appendChild(addProductBtn);
+
+  const deleteProductBtn = document.createElement("btn");
+  deleteProductBtn.classList.add("delete-product");
+  deleteProductBtn.textContent = "Ürün Sil";
+  newCategory.appendChild(deleteProductBtn);
+
+  const categoryInput = document.createElement("input");
+  categoryInput.classList.add("category-input");
+  categoryInput.setAttribute("type", "string");
+  categoryInput.setAttribute("placeholder", "KATEGORİ BAŞLIĞI");
+  newCategory.appendChild(categoryInput);
+
+  const deleteCategoryBtn = document.createElement("btn");
+  deleteCategoryBtn.classList.add("delete-category");
+  deleteCategoryBtn.textContent = "X";
+  newCategory.appendChild(deleteCategoryBtn);
+
+  body.insertBefore(newCategory, document.querySelector("script"));
+  setupCategoryListeners(newCategory);
+});
+
+deleteCategoryBtn.addEventListener("click", function () {
+  deleteCategoryBtn.parentNode.remove();
+});
+
+///////////////*---SETUP FUNCTIONS---*///////////////
+
+function setupCheckboxListener(checkbox) {
+  checkbox.addEventListener("change", function () {
+    if (checkbox.checked) {
+      checkbox.parentElement.classList.add("selected");
+    } else {
+      checkbox.parentElement.classList.remove("selected");
+    }
+  });
 }
 
 //When a new category is created, this function makes all buttons and textboxes available
@@ -197,42 +241,3 @@ function setupCategoryListeners(category) {
     category.remove();
   });
 }
-
-//Creating new category
-newCategoryBtn.addEventListener("click", function () {
-  const body = document.querySelector("body");
-  const newCategory = document.createElement("section");
-  newCategory.classList.add("category-section");
-
-  const categoryTitle = document.createElement("h3");
-  categoryTitle.classList.add("title");
-  newCategory.appendChild(categoryTitle);
-
-  const addProductBtn = document.createElement("btn");
-  addProductBtn.classList.add("add-product");
-  addProductBtn.textContent = "Ürün Ekle";
-  newCategory.appendChild(addProductBtn);
-
-  const deleteProductBtn = document.createElement("btn");
-  deleteProductBtn.classList.add("delete-product");
-  deleteProductBtn.textContent = "Ürün Sil";
-  newCategory.appendChild(deleteProductBtn);
-
-  const categoryInput = document.createElement("input");
-  categoryInput.classList.add("category-input");
-  categoryInput.setAttribute("type", "string");
-  categoryInput.setAttribute("placeholder", "KATEGORİ BAŞLIĞI");
-  newCategory.appendChild(categoryInput);
-
-  const deleteCategoryBtn = document.createElement("btn");
-  deleteCategoryBtn.classList.add("delete-category");
-  deleteCategoryBtn.textContent = "X";
-  newCategory.appendChild(deleteCategoryBtn);
-
-  body.insertBefore(newCategory, document.querySelector("script"));
-  setupCategoryListeners(newCategory);
-});
-
-deleteCategoryBtn.addEventListener("click", function () {
-  deleteCategoryBtn.parentNode.remove();
-});
