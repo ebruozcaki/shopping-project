@@ -7,13 +7,33 @@ let newCategoryBtn = document.querySelector(".new-category");
 let deleteCategoryBtn = document.querySelector(".delete-category");
 let removeFuncWorking = false;
 
+//Taking budget input and storing it in budgetValue
+let budgetValue = 0;
 budgetInput.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
+    e.preventDefault();
+    budgetValue = parseFloat(budgetInput.value);
     budgetInput.disabled = true;
   }
 });
 
-//Adding new product to a certain category
+//Calculating total product price
+function calculateTotalPrice() {
+  let productPrices = document.querySelectorAll(".product .price");
+  let total = 0;
+
+  productPrices.forEach((priceInput) => {
+    const priceValue = parseFloat(priceInput.value);
+    if (!isNaN(priceValue)) {
+      total += priceValue;
+    }
+  });
+
+  console.log("Total Price:", total);
+  return total;
+}
+
+//Adding new product to a certain category when "Ürün Ekle" button is clicked
 addProduct.addEventListener("click", function () {
   const productSection = document.querySelector(".product");
   const newProduct = document.createElement("div");
@@ -37,16 +57,25 @@ addProduct.addEventListener("click", function () {
   amount.classList.add("amount");
   newProduct.appendChild(amount);
 
-  const price = document.createElement("input");
+  let price = document.createElement("input");
   price.setAttribute("type", "number");
   price.setAttribute("placeholder", "Birim Fiyat");
   price.classList.add("price");
   newProduct.appendChild(price);
 
+  //When new price is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
+  price.addEventListener("input", function () {
+    const currentTotal = calculateTotalPrice();
+    if (budgetValue < currentTotal) {
+      window.alert("Bütçe  " + (currentTotal - budgetValue) + " TL aşıldı!");
+    }
+  });
+
   productSection.appendChild(newProduct);
 
   checkbox.classList.add("hidden");
   setupCheckboxListener(checkbox);
+  calculateTotalPrice();
 });
 
 function setupCheckboxListener(checkbox) {
@@ -92,6 +121,7 @@ function uncheck(checkbox) {
   checkbox.checked = false;
 }
 
+//When a new category is created, this function makes all buttons and textboxes available
 function setupCategoryListeners(category) {
   const addProductBtn = category.querySelector(".add-product");
   const deleteProductBtn = category.querySelector(".delete-product");
