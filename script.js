@@ -1,11 +1,17 @@
 "use strict";
 
-let title = document.querySelector(".title");
+let budgetInput = document.getElementById("budget-input");
 let addProduct = document.querySelector(".add-product");
 let deleteProduct = document.querySelector(".delete-product");
 let newCategoryBtn = document.querySelector(".new-category");
 let deleteCategoryBtn = document.querySelector(".delete-category");
 let removeFuncWorking = false;
+
+budgetInput.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    budgetInput.disabled = true;
+  }
+});
 
 //Adding new product to a certain category
 addProduct.addEventListener("click", function () {
