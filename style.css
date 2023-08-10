@@ -18,7 +18,7 @@ body {
 /*LAYOUT*/
 header {
   position: relative;
-  height: 35vh;
+  height: 25vh;
   border-bottom: 5px solid #eee;
 }
 
@@ -63,7 +63,7 @@ p {
   text-align: center;
   position: absolute;
   top: 10rem;
-  left: 5rem;
+  left: 3rem;
   border-radius: 10rem;
   padding: 1rem 1rem;
   cursor: pointer;
@@ -103,8 +103,7 @@ p {
 }
 
 #empty-section {
-  width: 0%;
-  margin: 0%;
+  display: none;
 }
 
 .category-section {
