@@ -3,6 +3,7 @@
 let budgetInput = document.getElementById("budget-input");
 let newCategoryBtn = document.querySelector(".new-category");
 let complete = document.querySelector(".complete");
+let removeFuncWorking = false;
 
 //Category creation
 function createCategory() {
@@ -108,11 +109,8 @@ newCategoryBtn.addEventListener("click", function () {
 });
 
 complete.addEventListener("click", function () {
-  let categories = document.querySelectorAll(".category-section");
-  categories.forEach((category) => {
-    category.remove();
-  });
-  alert("Lütfen sayfayı yenileyin.");
+  alert("Yeni liste oluşturuluyor...");
+  location.reload();
 });
 
 ///////////////*---SETUP FUNCTIONS---*///////////////
