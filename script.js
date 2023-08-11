@@ -1,5 +1,5 @@
 "use strict";
-
+localStorage.clear();
 let budgetInput = document.getElementById("budget-input");
 let budgetRemained = document.getElementById("budget-remained");
 let newCategoryBtn = document.querySelector(".new-category");
