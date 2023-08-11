@@ -1,6 +1,7 @@
 "use strict";
 
 let budgetInput = document.getElementById("budget-input");
+let budgetRemained = document.getElementById("budget-remained");
 let newCategoryBtn = document.querySelector(".new-category");
 let complete = document.querySelector(".complete");
 let flexContainer = document.querySelector(".flex-container");
@@ -65,7 +66,7 @@ function calculateTotalPrice() {
       total += priceValue;
     }
   });
-  console.log(total);
+  budgetRemained.textContent = "Kalan Bütçe: " + (budgetValue - total) + " TL";
   return total;
 }
 
