@@ -5,7 +5,9 @@ let budgetRemained = document.getElementById("budget-remained");
 let newCategoryBtn = document.querySelector(".new-category");
 let complete = document.querySelector(".complete");
 let flexContainer = document.querySelector(".flex-container");
+let categories = [];
 let removeFuncWorking = false;
+let budgetValue = 0;
 
 //Category creation
 function createCategory() {
@@ -44,12 +46,40 @@ function createCategory() {
   body.insertBefore(newCategory, document.querySelector("script"));
   setupCategoryListeners(newCategory);
   flexContainer.appendChild(newCategory);
+  return newCategory;
 }
 
 //Creating the default category
-createCategory();
+let category = createCategory();
+categories.push(category);
 
 ///////////////*---FUNCTIONS---*///////////////
+
+function loadCategoriesFromLocalStorage() {
+  const storedBudget = localStorage.getItem("budgetValue");
+  if (storedBudget !== null) {
+    budgetInput.value = storedBudget;
+    budgetValue = parseFloat(storedBudget);
+  }
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith("categoryName")) {
+      const categoryName = localStorage.getItem(key);
+      const newCategory = createCategory();
+      newCategory.children[3].value = categoryName;
+      categories.push(newCategory);
+    }
+  }
+}
+
+function saveCategoriesToLocalStorage() {
+  localStorage.setItem("budgetValue", budgetValue);
+  for (let i = 0; i < categories.length; i++) {
+    const categoryName = categories[i].children[3].value;
+    localStorage.setItem("categoryName" + i, categoryName);
+  }
+}
 
 // Calculating total product price
 function calculateTotalPrice() {
@@ -97,7 +127,6 @@ function uncheck(checkbox) {
 ///////////////*---EVENT LISTENERS---*///////////////
 
 //Taking budget input and storing it in budgetValue
-let budgetValue = 0;
 budgetInput.addEventListener("keydown", function (e) {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -108,7 +137,8 @@ budgetInput.addEventListener("keydown", function (e) {
 
 //Creating new category
 newCategoryBtn.addEventListener("click", function () {
-  createCategory();
+  category = createCategory();
+  categories.push(category);
 });
 
 complete.addEventListener("click", function () {
@@ -170,13 +200,11 @@ function setupCategoryListeners(category) {
 
     //When new price is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
     price.addEventListener("input", function () {
-      console.log("price listener");
       calculateTotalAndCheckBudget();
     });
 
     //When new amount is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
     amount.addEventListener("input", function () {
-      console.log("amount listener");
       calculateTotalAndCheckBudget();
     });
   });
@@ -203,3 +231,11 @@ function setupCategoryListeners(category) {
     category.remove();
   });
 }
+
+window.addEventListener("DOMContentLoaded", () => {
+  loadCategoriesFromLocalStorage();
+});
+
+window.addEventListener("beforeunload", () => {
+  saveCategoriesToLocalStorage();
+});

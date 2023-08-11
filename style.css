@@ -178,15 +178,6 @@ p {
   display: none;
 }
 
-.title {
-  text-transform: uppercase;
-  margin: 0.5rem;
-  position: relative;
-  font-size: 1.7rem;
-  font-weight: 600;
-  color: #222;
-}
-
 .checkbox {
   margin: 0.5rem;
   font-size: 1.5rem;
