@@ -3,6 +3,7 @@
 let budgetInput = document.getElementById("budget-input");
 let newCategoryBtn = document.querySelector(".new-category");
 let complete = document.querySelector(".complete");
+let flexContainer = document.querySelector(".flex-container");
 let removeFuncWorking = false;
 
 //Category creation
@@ -41,6 +42,7 @@ function createCategory() {
   });
   body.insertBefore(newCategory, document.querySelector("script"));
   setupCategoryListeners(newCategory);
+  flexContainer.appendChild(newCategory);
 }
 
 //Creating the default category
