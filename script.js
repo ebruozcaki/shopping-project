@@ -45,6 +45,7 @@ function createCategory() {
   flexContainer.appendChild(newCategory);
   categories.push(newCategory);
 
+  //Storing category name to localStorage
   categoryInput.addEventListener("keydown", function (e) {
     if (e.key !== "Enter") {
       categoryTitle += e.key;
@@ -214,9 +215,24 @@ function setupCategoryListeners(category) {
   //Deleting category when "X" button is clicked
   deleteCategoryBtn.addEventListener("click", function () {
     category.remove();
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (localStorage.getItem(key) === category) {
+        localStorage.removeItem(key);
+      }
+    }
   });
 }
 
+///////////////*---RELOAD FUNCTIONS---*///////////////
 window.addEventListener("load", function () {
   budgetInput.value = parseFloat(localStorage.getItem("budgetValue"));
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.startsWith("category")) {
+      const newStoredCategory = createCategory();
+      newStoredCategory.childNodes[2].value = localStorage.getItem(key);
+      flexContainer.appendChild(newStoredCategory);
+    }
+  }
 });
