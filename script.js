@@ -8,16 +8,13 @@ let flexContainer = document.querySelector(".flex-container");
 let categories = [];
 let removeFuncWorking = false;
 let budgetValue = 0;
+let categoryTitle = "";
 
 //Category creation
 function createCategory() {
   const body = document.querySelector("body");
   const newCategory = document.createElement("section");
   newCategory.classList.add("category-section");
-
-  const categoryTitle = document.createElement("h3");
-  categoryTitle.classList.add("title");
-  newCategory.appendChild(categoryTitle);
 
   const addProductBtn = document.createElement("btn");
   addProductBtn.classList.add("add-product");
@@ -46,12 +43,26 @@ function createCategory() {
   body.insertBefore(newCategory, document.querySelector("script"));
   setupCategoryListeners(newCategory);
   flexContainer.appendChild(newCategory);
+  categories.push(newCategory);
+
+  categoryInput.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter") {
+      categoryTitle += e.key;
+    } else {
+      e.preventDefault();
+      categoryInput.disabled = true;
+      localStorage.setItem(
+        "category" + categories.indexOf(newCategory),
+        categoryTitle
+      );
+      categoryTitle = "";
+    }
+  });
   return newCategory;
 }
 
 //Creating the default category
 let category = createCategory();
-categories.push(category);
 
 ///////////////*---FUNCTIONS---*///////////////
 
@@ -113,7 +124,6 @@ budgetInput.addEventListener("keydown", function (e) {
 //Creating new category
 newCategoryBtn.addEventListener("click", function () {
   category = createCategory();
-  categories.push(category);
 });
 
 complete.addEventListener("click", function () {
