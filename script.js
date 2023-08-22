@@ -1,5 +1,5 @@
 "use strict";
-localStorage.clear();
+
 let budgetInput = document.getElementById("budget-input");
 let budgetRemained = document.getElementById("budget-remained");
 let newCategoryBtn = document.querySelector(".new-category");
@@ -55,32 +55,6 @@ categories.push(category);
 
 ///////////////*---FUNCTIONS---*///////////////
 
-function loadCategoriesFromLocalStorage() {
-  const storedBudget = localStorage.getItem("budgetValue");
-  if (storedBudget !== null) {
-    budgetInput.value = storedBudget;
-    budgetValue = parseFloat(storedBudget);
-  }
-
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key.startsWith("categoryName")) {
-      const categoryName = localStorage.getItem(key);
-      const newCategory = createCategory();
-      newCategory.children[3].value = categoryName;
-      categories.push(newCategory);
-    }
-  }
-}
-
-function saveCategoriesToLocalStorage() {
-  localStorage.setItem("budgetValue", budgetValue);
-  for (let i = 0; i < categories.length; i++) {
-    const categoryName = categories[i].children[3].value;
-    localStorage.setItem("categoryName" + i, categoryName);
-  }
-}
-
 // Calculating total product price
 function calculateTotalPrice() {
   let productPrices = document.querySelectorAll(".product .price");
@@ -132,6 +106,7 @@ budgetInput.addEventListener("keydown", function (e) {
     e.preventDefault();
     budgetValue = parseFloat(budgetInput.value);
     budgetInput.disabled = true;
+    localStorage.setItem("budgetValue", budgetValue);
   }
 });
 
@@ -232,10 +207,6 @@ function setupCategoryListeners(category) {
   });
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  loadCategoriesFromLocalStorage();
-});
-
-window.addEventListener("beforeunload", () => {
-  saveCategoriesToLocalStorage();
+window.addEventListener("load", function () {
+  budgetInput.value = parseFloat(localStorage.getItem("budgetValue"));
 });
