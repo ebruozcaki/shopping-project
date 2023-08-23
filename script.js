@@ -47,9 +47,7 @@ function createCategory() {
 
   //Storing category name to localStorage
   categoryInput.addEventListener("keydown", function (e) {
-    if (/^[a-zA-Z]$/.test(e.key)) {
-      categoryTitle += e.key;
-    } else if (e.key === "Enter") {
+    if (e.key === "Enter") {
       e.preventDefault();
       categoryInput.disabled = true;
       localStorage.setItem(
@@ -57,6 +55,13 @@ function createCategory() {
         categoryTitle
       );
       categoryTitle = "";
+    } else if (e.key === "Backspace") {
+      categoryTitle = categoryTitle.slice(0, -1); // Son karakteri sil
+    } else {
+      let validCharacters = /^[a-zA-ZçğıöşüÇĞİÖŞÜ ]$/; // Geçerli karakterlerin regex'i
+      if (validCharacters.test(e.key)) {
+        categoryTitle += e.key;
+      }
     }
   });
   return newCategory;
@@ -121,7 +126,7 @@ budgetInput.addEventListener("keydown", function (e) {
 
 //Creating new category
 newCategoryBtn.addEventListener("click", function () {
-  category = createCategory();
+  createCategory();
 });
 
 complete.addEventListener("click", function () {
@@ -142,50 +147,6 @@ function setupCheckboxListener(checkbox) {
   });
 }
 
-function createProduct(category) {
-  const newProduct = document.createElement("div");
-  newProduct.classList.add("product");
-
-  const checkbox = document.createElement("input");
-  checkbox.setAttribute("type", "checkbox");
-  checkbox.classList.add("checkbox");
-  checkbox.checked = false;
-  newProduct.appendChild(checkbox);
-
-  const productInput = document.createElement("input");
-  productInput.setAttribute("type", "string");
-  productInput.setAttribute("placeholder", "Ürün Başlığı");
-  productInput.classList.add("product-input");
-  newProduct.appendChild(productInput);
-
-  const amount = document.createElement("input");
-  amount.setAttribute("type", "number");
-  amount.setAttribute("placeholder", "Adet");
-  amount.classList.add("amount");
-  newProduct.appendChild(amount);
-
-  const price = document.createElement("input");
-  price.setAttribute("type", "number");
-  price.setAttribute("placeholder", "Birim Fiyat");
-  price.classList.add("price");
-  newProduct.appendChild(price);
-
-  category.appendChild(newProduct);
-
-  checkbox.classList.add("hidden");
-  setupCheckboxListener(checkbox);
-
-  //When new price is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
-  price.addEventListener("input", function () {
-    calculateTotalAndCheckBudget();
-  });
-
-  //When new amount is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
-  amount.addEventListener("input", function () {
-    calculateTotalAndCheckBudget();
-  });
-}
-
 //When a new category is created, this function makes all buttons and textboxes available
 function setupCategoryListeners(category) {
   const addProductBtn = category.querySelector(".add-product");
@@ -194,7 +155,47 @@ function setupCategoryListeners(category) {
 
   //Adding new product to a certain category when "Ürün Ekle" button is clicked
   addProductBtn.addEventListener("click", function () {
-    createProduct(category);
+    const newProduct = document.createElement("div");
+    newProduct.classList.add("product");
+
+    const checkbox = document.createElement("input");
+    checkbox.setAttribute("type", "checkbox");
+    checkbox.classList.add("checkbox");
+    checkbox.checked = false;
+    newProduct.appendChild(checkbox);
+
+    const productInput = document.createElement("input");
+    productInput.setAttribute("type", "string");
+    productInput.setAttribute("placeholder", "Ürün Başlığı");
+    productInput.classList.add("product-input");
+    newProduct.appendChild(productInput);
+
+    const amount = document.createElement("input");
+    amount.setAttribute("type", "number");
+    amount.setAttribute("placeholder", "Adet");
+    amount.classList.add("amount");
+    newProduct.appendChild(amount);
+
+    const price = document.createElement("input");
+    price.setAttribute("type", "number");
+    price.setAttribute("placeholder", "Birim Fiyat");
+    price.classList.add("price");
+    newProduct.appendChild(price);
+
+    category.appendChild(newProduct);
+
+    checkbox.classList.add("hidden");
+    setupCheckboxListener(checkbox);
+
+    //When new price is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
+    price.addEventListener("input", function () {
+      calculateTotalAndCheckBudget();
+    });
+
+    //When new amount is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
+    amount.addEventListener("input", function () {
+      calculateTotalAndCheckBudget();
+    });
   });
 
   //Deleting product(s) from a certain category when "Ürün Sil" button is clicked
