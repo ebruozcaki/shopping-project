@@ -5,7 +5,9 @@ let budgetRemained = document.getElementById("budget-remained");
 let newCategoryBtn = document.querySelector(".new-category");
 let complete = document.querySelector(".complete");
 let flexContainer = document.querySelector(".flex-container");
-let categories = [];
+let categories = localStorage.getItem("categoriesArray")
+  ? JSON.parse(localStorage.getItem("categoriesArray"))
+  : [];
 let removeFuncWorking = false;
 let budgetValue = 0;
 let categoryTitle = "";
@@ -44,6 +46,7 @@ function createCategory() {
   setupCategoryListeners(newCategory);
   flexContainer.appendChild(newCategory);
   categories.push(newCategory);
+  localStorage.setItem("categoriesArray", JSON.stringify(categories));
 
   //Storing category name to localStorage
   categoryInput.addEventListener("keydown", function (e) {
@@ -51,7 +54,7 @@ function createCategory() {
       e.preventDefault();
       categoryInput.disabled = true;
       localStorage.setItem(
-        "category" + categories.indexOf(newCategory),
+        "category_" + categories.indexOf(newCategory),
         categoryTitle
       );
       categoryTitle = "";
@@ -183,6 +186,22 @@ function setupCategoryListeners(category) {
     newProduct.appendChild(price);
 
     category.appendChild(newProduct);
+    if (category.childNodes[4] === newProduct) {
+      let arr = [newProduct];
+      localStorage.setItem(
+        "category: " + category.childNodes[2].value,
+        JSON.stringify(arr)
+      );
+    } else {
+      let arr = JSON.parse(
+        localStorage.getItem("category: " + category.childNodes[2].value)
+      );
+      arr.push(newProduct);
+      localStorage.setItem(
+        "category: " + category.childNodes[2].value,
+        JSON.stringify(arr)
+      );
+    }
 
     checkbox.classList.add("hidden");
     setupCheckboxListener(checkbox);
@@ -208,6 +227,7 @@ function setupCategoryListeners(category) {
       const selectedProducts = category.querySelectorAll(".product.selected");
       selectedProducts.forEach((product) => {
         product.remove();
+        calculateTotalAndCheckBudget();
       });
       checkboxes.forEach((checkbox) => {
         checkbox.classList.add("hidden");
@@ -225,6 +245,11 @@ function setupCategoryListeners(category) {
         localStorage.removeItem(key);
       }
     }
+
+    const index = categories.indexOf(category);
+    categories = categories.splice(index, 1);
+    localStorage.removeItem("categoriesArray");
+    localStorage.setItem("categoriesArray", JSON.parse(categories));
     category.remove();
   });
 }
@@ -233,10 +258,10 @@ function setupCategoryListeners(category) {
 window.addEventListener("load", function () {
   budgetInput.value = parseFloat(localStorage.getItem("budgetValue"));
   for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key.startsWith("category")) {
+    const keyi = localStorage.key(i);
+    if (keyi.startsWith("category_")) {
       const newStoredCategory = createCategory();
-      newStoredCategory.childNodes[2].value = localStorage.getItem(key);
+      newStoredCategory.childNodes[2].value = localStorage.getItem(keyi);
       flexContainer.appendChild(newStoredCategory);
     }
   }
