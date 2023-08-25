@@ -3,10 +3,19 @@
 let budgetInput = document.getElementById("budget-input");
 let budgetRemained = document.getElementById("budget-remained");
 let newCategoryBtn = document.querySelector(".new-category");
+let favoritesBtn = document.querySelector(".favorites");
 let complete = document.querySelector(".complete");
 let flexContainer = document.querySelector(".flex-container");
+let favProductsContainer = document.createElement("section");
+document.querySelector("header").insertBefore(favProductsContainer, complete);
+favProductsContainer.classList.add("favproducts-container");
+favProductsContainer.classList.add("hidden");
+const favList = document.createElement("ul");
+favProductsContainer.appendChild(favList);
 let categories = [];
-let removeFuncWorking = false;
+let favProducts = [];
+let removeFuncWorking = false; //Boolean for the click on delete product button
+let favContainerWorking = false; //Boolean for the click on favorites button
 let budgetValue = 0;
 let categoryTitle = "";
 
@@ -121,12 +130,22 @@ budgetInput.addEventListener("keydown", function (e) {
     budgetValue = parseFloat(budgetInput.value);
     budgetInput.disabled = true;
     localStorage.setItem("budgetValue", budgetValue);
+    calculateTotalAndCheckBudget();
   }
 });
 
 //Creating new category
 newCategoryBtn.addEventListener("click", function () {
   createCategory();
+});
+
+favoritesBtn.addEventListener("click", function () {
+  favContainerWorking = !favContainerWorking;
+  if (favContainerWorking) {
+    favProductsContainer.classList.remove("hidden");
+  } else {
+    favProductsContainer.classList.add("hidden");
+  }
 });
 
 complete.addEventListener("click", function () {
@@ -155,6 +174,7 @@ function setupCategoryListeners(category) {
 
   //Adding new product to a certain category when "Ürün Ekle" button is clicked
   addProductBtn.addEventListener("click", function () {
+    let favoriteFuncWorking = false; //Boolean for the click on favorite button
     const newProduct = document.createElement("div");
     newProduct.classList.add("product");
 
@@ -182,6 +202,11 @@ function setupCategoryListeners(category) {
     price.classList.add("price");
     newProduct.appendChild(price);
 
+    const favoriteBtn = document.createElement("btn");
+    favoriteBtn.textContent = "☆";
+    favoriteBtn.classList.add("favorite");
+    newProduct.appendChild(favoriteBtn);
+
     category.appendChild(newProduct);
 
     checkbox.classList.add("hidden");
@@ -195,6 +220,34 @@ function setupCategoryListeners(category) {
     //When new amount is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
     amount.addEventListener("input", function () {
       calculateTotalAndCheckBudget();
+    });
+
+    favoriteBtn.addEventListener("click", function () {
+      favoriteFuncWorking = !favoriteFuncWorking;
+      if (favoriteFuncWorking) {
+        favoriteBtn.textContent = "★";
+        favProducts.push(favoriteBtn.parentElement.childNodes[1].value);
+        const option = document.createElement("li");
+        option.textContent = favoriteBtn.parentElement.childNodes[1].value;
+        favList.appendChild(option);
+      } else {
+        favoriteBtn.textContent = "☆";
+        for (let i = 0; i < favProducts.length; i++) {
+          if (
+            favoriteBtn.parentElement.childNodes[1].value === favProducts[i]
+          ) {
+            favProducts.splice(i, 1);
+            for (let j = 0; j < favList.childNodes.length; j++) {
+              if (
+                favoriteBtn.parentElement.childNodes[1].value ===
+                favList.childNodes[j].textContent
+              ) {
+                favList.removeChild(favList.childNodes[j]);
+              }
+            }
+          }
+        }
+      }
     });
   });
 
@@ -228,8 +281,10 @@ function setupCategoryListeners(category) {
     }
 
     const index = categories.indexOf(category);
-    categories = categories.splice(index, 1);
+    categories.splice(index, 1);
     category.remove();
+
+    favList.textContent = "";
   });
 }
 
