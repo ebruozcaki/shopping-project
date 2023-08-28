@@ -193,10 +193,6 @@ ul {
   align-items: flex-start;
 }
 
-#empty-section {
-  display: none;
-}
-
 .category-section {
   display: inline-block;
   position: relative;
