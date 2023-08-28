@@ -4,6 +4,7 @@ let budgetInput = document.getElementById("budget-input");
 let budgetRemained = document.getElementById("budget-remained");
 let newCategoryBtn = document.querySelector(".new-category");
 let listFavoritesBtn = document.querySelector(".favorites");
+let listRecentsBtn = document.querySelector(".recents");
 let complete = document.querySelector(".complete");
 let flexContainer = document.querySelector(".flex-container");
 let favProductsContainer = document.createElement("section");
@@ -12,10 +13,20 @@ favProductsContainer.classList.add("favproducts-container");
 favProductsContainer.classList.add("hidden");
 const favList = document.createElement("ul");
 favProductsContainer.appendChild(favList);
+let recentProductsContainer = document.createElement("section");
+document
+  .querySelector("header")
+  .insertBefore(recentProductsContainer, complete);
+recentProductsContainer.classList.add("recentproducts-container");
+recentProductsContainer.classList.add("hidden");
+const recentList = document.createElement("ul");
+recentProductsContainer.appendChild(recentList);
 let categories = [];
 let favProducts = [];
+let recentProducts = new Array(3);
 let removeFuncWorking = false; //Boolean for the click on delete product button
 let favContainerWorking = false; //Boolean for the click on favorites button
+let recentContainerWorking = false;
 let budgetValue = 0;
 let categoryTitle = "";
 
@@ -116,6 +127,13 @@ function addProduct(category) {
 
   checkbox.classList.add("hidden");
   setupCheckboxListener(checkbox);
+
+  productInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      recentProducts.shift();
+      recentProducts.push(newProduct.childNodes[1].value);
+    }
+  });
 
   //When new price is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
   price.addEventListener("input", function () {
@@ -225,6 +243,44 @@ listFavoritesBtn.addEventListener("click", function () {
     favProductsContainer.classList.add("hidden");
   }
   addFavToCategoryBtns.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const targetCategoryName = window.prompt("Kategori seçiniz.");
+      for (let i = 0; i < categories.length; i++) {
+        if (
+          categories[i].childNodes[2].value.toLowerCase() ===
+          targetCategoryName.toLowerCase()
+        ) {
+          const targetCategory = categories[i];
+          addProduct(targetCategory);
+          targetCategory.lastChild.childNodes[1].value =
+            btn.parentNode.innerText.slice(0, -1);
+        }
+      }
+    });
+  });
+});
+
+listRecentsBtn.addEventListener("click", function () {
+  recentContainerWorking = !recentContainerWorking;
+  if (recentContainerWorking) {
+    recentProductsContainer.classList.remove("hidden");
+    while (recentList.firstChild) {
+      recentList.removeChild(recentList.firstChild);
+    }
+    for (let i = 0; i < 3; i++) {
+      const option = document.createElement("li");
+      option.textContent = recentProducts[i];
+      option.innerHTML +=
+        '<button class="btn add-recent-to-category">+</button>';
+      recentList.appendChild(option);
+    }
+  } else {
+    recentProductsContainer.classList.add("hidden");
+  }
+  const addRecentToCategoryBtns = document.querySelectorAll(
+    ".add-recent-to-category"
+  );
+  addRecentToCategoryBtns.forEach((btn) => {
     btn.addEventListener("click", function () {
       const targetCategoryName = window.prompt("Kategori seçiniz.");
       for (let i = 0; i < categories.length; i++) {

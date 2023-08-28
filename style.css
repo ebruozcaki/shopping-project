@@ -71,7 +71,7 @@ ul {
   text-align: center;
   position: absolute;
   top: 10rem;
-  left: 20rem;
+  left: 18rem;
   border-radius: 10rem;
   padding: 1rem 1rem;
   cursor: pointer;
@@ -82,8 +82,8 @@ ul {
   flex-flow: column wrap;
   position: absolute;
   top: 10rem;
-  left: 30rem;
-  width: 10rem;
+  left: 27rem;
+  width: 12rem;
   height: 10rem;
   overflow-y: auto;
   font-size: 1.4rem;
@@ -121,7 +121,7 @@ ul {
   text-align: center;
   position: relative;
   top: 10rem;
-  left: 38%;
+  left: 33%;
   border-radius: 5px;
   padding: 1rem 1rem;
 }
@@ -135,7 +135,7 @@ ul {
   text-align: center;
   position: absolute;
   top: 10rem;
-  right: 24rem;
+  right: 22rem;
   border-radius: 10rem;
   padding: 1rem 1rem;
   cursor: pointer;
@@ -146,8 +146,8 @@ ul {
   flex-flow: column wrap;
   position: absolute;
   top: 10rem;
-  right: 40rem;
-  width: auto;
+  right: 36rem;
+  width: 12rem;
   height: 10rem;
   overflow-y: auto;
   font-size: 1.4rem;
@@ -156,6 +156,20 @@ ul {
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+}
+
+.add-recent-to-category {
+  background-color: rgb(21, 197, 109);
+  color: #eee;
+  border: none;
+  font-size: 1.4rem;
+  font-weight: 350;
+  text-align: center;
+  padding: 2%;
+  margin: 1%;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
 }
 
 .complete {
