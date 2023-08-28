@@ -18,7 +18,7 @@ body {
 /*LAYOUT*/
 header {
   position: relative;
-  height: 20vh;
+  height: 30vh;
   border-bottom: 5px solid #eee;
 }
 
@@ -41,6 +41,10 @@ h1 {
 
 p {
   font-size: 1.5rem;
+}
+
+ul {
+  list-style-type: none;
 }
 
 .new-category {
@@ -80,13 +84,28 @@ p {
   top: 10rem;
   left: 30rem;
   width: 10rem;
-  text-align: center;
+  height: 10rem;
+  overflow-y: auto;
   font-size: 1.4rem;
   font-weight: 600;
   padding: 1rem 1rem;
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+}
+
+.add-fav-to-category {
+  background-color: rgb(21, 197, 109);
+  color: #eee;
+  border: none;
+  font-size: 1.4rem;
+  font-weight: 350;
+  text-align: center;
+  padding: 2%;
+  margin: 1%;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
 }
 
 #label-id {
@@ -105,6 +124,38 @@ p {
   left: 38%;
   border-radius: 5px;
   padding: 1rem 1rem;
+}
+
+.recents {
+  background-color: lightcoral;
+  color: white;
+  border: none;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  position: absolute;
+  top: 10rem;
+  right: 24rem;
+  border-radius: 10rem;
+  padding: 1rem 1rem;
+  cursor: pointer;
+}
+
+.recentproducts-container {
+  display: flex;
+  flex-flow: column wrap;
+  position: absolute;
+  top: 10rem;
+  right: 40rem;
+  width: auto;
+  height: 10rem;
+  overflow-y: auto;
+  font-size: 1.4rem;
+  font-weight: 600;
+  padding: 1rem 1rem;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
 }
 
 .complete {

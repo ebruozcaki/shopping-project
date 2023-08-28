@@ -3,7 +3,7 @@
 let budgetInput = document.getElementById("budget-input");
 let budgetRemained = document.getElementById("budget-remained");
 let newCategoryBtn = document.querySelector(".new-category");
-let favoritesBtn = document.querySelector(".favorites");
+let listFavoritesBtn = document.querySelector(".favorites");
 let complete = document.querySelector(".complete");
 let flexContainer = document.querySelector(".flex-container");
 let favProductsContainer = document.createElement("section");
@@ -19,6 +19,7 @@ let favContainerWorking = false; //Boolean for the click on favorites button
 let budgetValue = 0;
 let categoryTitle = "";
 
+///////////////*---FUNCTIONS---*///////////////
 //Category creation
 function createCategory() {
   const body = document.querySelector("body");
@@ -76,7 +77,81 @@ function createCategory() {
   return newCategory;
 }
 
-///////////////*---FUNCTIONS---*///////////////
+//Product creation
+function addProduct(category) {
+  let favoriteFuncWorking = false; //Boolean for the click on favorite button
+  const newProduct = document.createElement("div");
+  newProduct.classList.add("product");
+
+  const checkbox = document.createElement("input");
+  checkbox.setAttribute("type", "checkbox");
+  checkbox.classList.add("checkbox");
+  checkbox.checked = false;
+  newProduct.appendChild(checkbox);
+
+  const productInput = document.createElement("input");
+  productInput.setAttribute("type", "string");
+  productInput.setAttribute("placeholder", "Ürün Başlığı");
+  productInput.classList.add("product-input");
+  newProduct.appendChild(productInput);
+
+  const amount = document.createElement("input");
+  amount.setAttribute("type", "number");
+  amount.setAttribute("placeholder", "Adet");
+  amount.classList.add("amount");
+  newProduct.appendChild(amount);
+
+  const price = document.createElement("input");
+  price.setAttribute("type", "number");
+  price.setAttribute("placeholder", "Birim Fiyat");
+  price.classList.add("price");
+  newProduct.appendChild(price);
+
+  const favoriteBtn = document.createElement("btn");
+  favoriteBtn.textContent = "☆";
+  favoriteBtn.classList.add("favorite");
+  newProduct.appendChild(favoriteBtn);
+
+  category.appendChild(newProduct);
+
+  checkbox.classList.add("hidden");
+  setupCheckboxListener(checkbox);
+
+  //When new price is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
+  price.addEventListener("input", function () {
+    calculateTotalAndCheckBudget();
+  });
+
+  //When new amount is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
+  amount.addEventListener("input", function () {
+    calculateTotalAndCheckBudget();
+  });
+
+  favoriteBtn.addEventListener("click", function () {
+    favoriteFuncWorking = !favoriteFuncWorking;
+    const productName = favoriteBtn.parentElement.childNodes[1].value;
+    if (favoriteFuncWorking) {
+      favoriteBtn.textContent = "★";
+      favProducts.push(productName);
+      const option = document.createElement("li");
+      option.textContent = productName;
+      option.innerHTML += '<button class="btn add-fav-to-category">+</button>';
+      favList.appendChild(option);
+    } else {
+      favoriteBtn.textContent = "☆";
+      for (let i = 0; i < favProducts.length; i++) {
+        if (productName === favProducts[i]) {
+          favProducts.splice(i, 1);
+          for (let j = 0; j < favList.childNodes.length; j++) {
+            if (productName + "+" === favList.childNodes[j].innerText) {
+              favList.removeChild(favList.childNodes[j]);
+            }
+          }
+        }
+      }
+    }
+  });
+}
 
 // Calculating total product price
 function calculateTotalPrice() {
@@ -139,13 +214,32 @@ newCategoryBtn.addEventListener("click", function () {
   createCategory();
 });
 
-favoritesBtn.addEventListener("click", function () {
+listFavoritesBtn.addEventListener("click", function () {
+  const addFavToCategoryBtns = document.querySelectorAll(
+    ".add-fav-to-category"
+  );
   favContainerWorking = !favContainerWorking;
   if (favContainerWorking) {
     favProductsContainer.classList.remove("hidden");
   } else {
     favProductsContainer.classList.add("hidden");
   }
+  addFavToCategoryBtns.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const targetCategoryName = window.prompt("Kategori seçiniz.");
+      for (let i = 0; i < categories.length; i++) {
+        if (
+          categories[i].childNodes[2].value.toLowerCase() ===
+          targetCategoryName.toLowerCase()
+        ) {
+          const targetCategory = categories[i];
+          addProduct(targetCategory);
+          targetCategory.lastChild.childNodes[1].value =
+            btn.parentNode.innerText.slice(0, -1);
+        }
+      }
+    });
+  });
 });
 
 complete.addEventListener("click", function () {
@@ -174,81 +268,7 @@ function setupCategoryListeners(category) {
 
   //Adding new product to a certain category when "Ürün Ekle" button is clicked
   addProductBtn.addEventListener("click", function () {
-    let favoriteFuncWorking = false; //Boolean for the click on favorite button
-    const newProduct = document.createElement("div");
-    newProduct.classList.add("product");
-
-    const checkbox = document.createElement("input");
-    checkbox.setAttribute("type", "checkbox");
-    checkbox.classList.add("checkbox");
-    checkbox.checked = false;
-    newProduct.appendChild(checkbox);
-
-    const productInput = document.createElement("input");
-    productInput.setAttribute("type", "string");
-    productInput.setAttribute("placeholder", "Ürün Başlığı");
-    productInput.classList.add("product-input");
-    newProduct.appendChild(productInput);
-
-    const amount = document.createElement("input");
-    amount.setAttribute("type", "number");
-    amount.setAttribute("placeholder", "Adet");
-    amount.classList.add("amount");
-    newProduct.appendChild(amount);
-
-    const price = document.createElement("input");
-    price.setAttribute("type", "number");
-    price.setAttribute("placeholder", "Birim Fiyat");
-    price.classList.add("price");
-    newProduct.appendChild(price);
-
-    const favoriteBtn = document.createElement("btn");
-    favoriteBtn.textContent = "☆";
-    favoriteBtn.classList.add("favorite");
-    newProduct.appendChild(favoriteBtn);
-
-    category.appendChild(newProduct);
-
-    checkbox.classList.add("hidden");
-    setupCheckboxListener(checkbox);
-
-    //When new price is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
-    price.addEventListener("input", function () {
-      calculateTotalAndCheckBudget();
-    });
-
-    //When new amount is sent, calculates current total price and compares it with budgetValue. Alerts message if budget is exceeded.
-    amount.addEventListener("input", function () {
-      calculateTotalAndCheckBudget();
-    });
-
-    favoriteBtn.addEventListener("click", function () {
-      favoriteFuncWorking = !favoriteFuncWorking;
-      if (favoriteFuncWorking) {
-        favoriteBtn.textContent = "★";
-        favProducts.push(favoriteBtn.parentElement.childNodes[1].value);
-        const option = document.createElement("li");
-        option.textContent = favoriteBtn.parentElement.childNodes[1].value;
-        favList.appendChild(option);
-      } else {
-        favoriteBtn.textContent = "☆";
-        for (let i = 0; i < favProducts.length; i++) {
-          if (
-            favoriteBtn.parentElement.childNodes[1].value === favProducts[i]
-          ) {
-            favProducts.splice(i, 1);
-            for (let j = 0; j < favList.childNodes.length; j++) {
-              if (
-                favoriteBtn.parentElement.childNodes[1].value ===
-                favList.childNodes[j].textContent
-              ) {
-                favList.removeChild(favList.childNodes[j]);
-              }
-            }
-          }
-        }
-      }
-    });
+    addProduct(category);
   });
 
   //Deleting product(s) from a certain category when "Ürün Sil" button is clicked
