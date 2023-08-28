@@ -8,11 +8,15 @@ let listRecentsBtn = document.querySelector(".recents");
 let complete = document.querySelector(".complete");
 let flexContainer = document.querySelector(".flex-container");
 let favProductsContainer = document.createElement("section");
+
+//Creating a container that holds favorited products and adding an ul list to it.
 document.querySelector("header").insertBefore(favProductsContainer, complete);
 favProductsContainer.classList.add("favproducts-container");
 favProductsContainer.classList.add("hidden");
 const favList = document.createElement("ul");
 favProductsContainer.appendChild(favList);
+
+////Creating a container that holds the most recently used 3 products and adding an ul list to it.
 let recentProductsContainer = document.createElement("section");
 document
   .querySelector("header")
@@ -21,6 +25,8 @@ recentProductsContainer.classList.add("recentproducts-container");
 recentProductsContainer.classList.add("hidden");
 const recentList = document.createElement("ul");
 recentProductsContainer.appendChild(recentList);
+
+//Arrays, values, strings that we need
 let categories = [];
 let favProducts = [];
 let recentProducts = new Array(3);
@@ -31,6 +37,7 @@ let budgetValue = 0;
 let categoryTitle = "";
 
 ///////////////*---FUNCTIONS---*///////////////
+
 //Category creation
 function createCategory() {
   const body = document.querySelector("body");
@@ -128,10 +135,13 @@ function addProduct(category) {
   checkbox.classList.add("hidden");
   setupCheckboxListener(checkbox);
 
+  //Adding the most recent product name to recentProducts array
   productInput.addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
+      e.preventDefault();
       recentProducts.shift();
       recentProducts.push(newProduct.childNodes[1].value);
+      productInput.disabled = true;
     }
   });
 
@@ -145,6 +155,7 @@ function addProduct(category) {
     calculateTotalAndCheckBudget();
   });
 
+  //If the product is favorited, adds productName to favProducts array and favList list.
   favoriteBtn.addEventListener("click", function () {
     favoriteFuncWorking = !favoriteFuncWorking;
     const productName = favoriteBtn.parentElement.childNodes[1].value;
@@ -232,6 +243,7 @@ newCategoryBtn.addEventListener("click", function () {
   createCategory();
 });
 
+//Displaying the favorite products and adding them to selected categories
 listFavoritesBtn.addEventListener("click", function () {
   const addFavToCategoryBtns = document.querySelectorAll(
     ".add-fav-to-category"
@@ -260,6 +272,7 @@ listFavoritesBtn.addEventListener("click", function () {
   });
 });
 
+//Displaying the most recently used 3 products and adding them to selected categories
 listRecentsBtn.addEventListener("click", function () {
   recentContainerWorking = !recentContainerWorking;
   if (recentContainerWorking) {
@@ -298,6 +311,7 @@ listRecentsBtn.addEventListener("click", function () {
   });
 });
 
+//Completing shopping and clearing localStorage
 complete.addEventListener("click", function () {
   alert("Alışveriş tamamlanıyor...");
   localStorage.clear();
@@ -306,6 +320,7 @@ complete.addEventListener("click", function () {
 
 ///////////////*---SETUP FUNCTIONS---*///////////////
 
+//Displaying the checkboxes that are placed next to each product
 function setupCheckboxListener(checkbox) {
   checkbox.addEventListener("change", function () {
     if (checkbox.checked) {
